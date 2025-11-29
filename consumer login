@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumer Login | FOOD LOOP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-text: #FFFFFF;
+            --alternative-text: #F0F5F3;
+            --strong-accent: #FFD166;
+            --highlight: #E63946;
+            --dark-bg: #1a2e28;
+            --medium-bg: #234338;
+            --light-bg: #2d5748;
+            --card-bg: #3a584c;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--primary-text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 209, 102, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 80% 20%, rgba(230, 57, 70, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 40% 40%, rgba(45, 87, 72, 0.15) 0%, transparent 50%);
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 209, 102, 0.1);
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 70%;
+            left: 80%;
+            animation-delay: -5s;
+            background: rgba(230, 57, 70, 0.08);
+        }
+
+        .floating-element:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 20%;
+            left: 85%;
+            animation-delay: -10s;
+            background: rgba(45, 87, 72, 0.1);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .login-container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            min-height: 700px;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Left Side - Branding & Info */
+        .login-left {
+            flex: 1.2;
+            background: linear-gradient(135deg, var(--medium-bg), var(--light-bg));
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 15% 70%, rgba(255, 209, 102, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(230, 57, 70, 0.1) 0%, transparent 40%),
+                linear-gradient(135deg, transparent 0%, rgba(45, 87, 72, 0.2) 100%);
+            z-index: 0;
+        }
+
+        .login-left-content {
+            position: relative;
+            z-index: 1;
+            animation: slideInLeft 1s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: var(--strong-accent);
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: var(--highlight);
+            border-radius: 2px;
+        }
+
+        .welcome-title {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--primary-text), var(--alternative-text));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.3rem;
+            color: var(--alternative-text);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .benefit-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.8rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .benefit-card:hover::before {
+            left: 100%;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .benefit-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--strong-accent), #ffb347);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--dark-bg);
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover .benefit-icon {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .benefit-text h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .benefit-text p {
+            color: var(--alternative-text);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Right Side - Login Form */
+        .login-right {
+            flex: 1;
+            background-color: var(--card-bg);
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            animation: slideInRight 1s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .login-right::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(255, 209, 102, 0.05) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .login-right-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .user-type-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--highlight), #c1121f);
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .login-title {
+            font-size: 2.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: var(--alternative-text);
+            font-size: 1.1rem;
+        }
+
+        .login-form {
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.7rem;
+            font-weight: 500;
+            color: var(--alternative-text);
+            transition: all 0.3s ease;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1.3rem 1.3rem 1.3rem 4rem;
+            border: 1px solid var(--light-bg);
+            border-radius: 14px;
+            background-color: rgba(255, 255, 255, 0.08);
+            color: var(--primary-text);
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-input::placeholder {
+            color: var(--alternative-text);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--strong-accent);
+            box-shadow: 0 0 0 3px rgba(255, 209, 102, 0.3);
+            background-color: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .form-input:focus::placeholder {
+            opacity: 0.7;
+            transform: translateX(5px);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1.3rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--alternative-text);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .symbol-icon {
+            position: absolute;
+            left: 3rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--alternative-text);
+            font-size: 1rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .form-input:focus ~ .input-icon,
+        .form-input:focus ~ .symbol-icon {
+            color: var(--strong-accent);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1.3rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--alternative-text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            padding: 5px;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .password-toggle:hover {
+            color: var(--strong-accent);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.8rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            cursor: pointer;
+        }
+
+        .remember-me input {
+            accent-color: var(--strong-accent);
+            transform: scale(1.3);
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            color: var(--strong-accent);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .forgot-password::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--strong-accent);
+            transition: width 0.3s ease;
+        }
+
+        .forgot-password:hover::after {
+            width: 100%;
+        }
+
+        .login-button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--highlight), #c1121f);
+            color: white;
+            border: none;
+            padding: 1.3rem;
+            border-radius: 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin-bottom: 1.8rem;
+            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .login-button:hover::before {
+            left: 100%;
+        }
+
+        .login-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(230, 57, 70, 0.6);
+        }
+
+        .login-button:active {
+            transform: translateY(-1px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 2.2rem 0;
+            position: relative;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--light-bg), transparent);
+        }
+
+        .divider span {
+            padding: 0 1.8rem;
+            color: var(--alternative-text);
+            font-size: 0.95rem;
+            background: var(--card-bg);
+            z-index: 1;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 2.2rem;
+        }
+
+        .social-button {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.1rem;
+            border: 1px solid var(--light-bg);
+            border-radius: 14px;
+            background-color: rgba(255, 255, 255, 0.08);
+            color: var(--primary-text);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .social-button:hover::before {
+            left: 100%;
+        }
+
+        .social-button.google {
+            background: linear-gradient(135deg, #4285F4, #34A853, #FBBC05, #EA4335);
+            border: none;
+            color: white;
+        }
+
+        .social-button.facebook {
+            background: linear-gradient(135deg, #1877F2, #0D8AF0);
+            border: none;
+            color: white;
+        }
+
+        .social-button.apple {
+            background: linear-gradient(135deg, #000000, #434343);
+            border: none;
+            color: white;
+        }
+
+        .social-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .social-icon {
+            font-size: 1.4rem;
+            transition: transform 0.3s ease;
+        }
+
+        .social-button:hover .social-icon {
+            transform: scale(1.2);
+        }
+
+        .register-link {
+            text-align: center;
+            color: var(--alternative-text);
+            font-size: 1rem;
+        }
+
+        .register-link a {
+            color: var(--strong-accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .register-link a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--strong-accent);
+            transition: width 0.3s ease;
+        }
+
+        .register-link a:hover::after {
+            width: 100%;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 3rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--light-bg);
+        }
+
+        .stat-item {
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--strong-accent);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--alternative-text);
+            margin-top: 0.5rem;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--highlight);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(150%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Symbol Animations */
+        @keyframes symbolBounce {
+            0%, 100% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.1); }
+        }
+
+        .form-input:focus ~ .symbol-icon {
+            animation: symbolBounce 0.5s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 600px;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .login-left, .login-right {
+                padding: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .login-left, .login-right {
+                padding: 2rem;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .welcome-title {
+                font-size: 2.2rem;
+            }
+            
+            .social-login {
+                flex-direction: column;
+            }
+            
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .stats-section {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .form-input {
+                padding: 1.3rem 1.3rem 1.3rem 3.5rem;
+            }
+            
+            .symbol-icon {
+                left: 2.8rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <div class="login-container">
+        <!-- Left Side - Branding & Info -->
+        <div class="login-left">
+            <div class="login-left-content">
+                <div class="logo">FOOD LOOP</div>
+                <h1 class="welcome-title">Save Food, Save Money, Save the Planet</h1>
+                <p class="welcome-subtitle">
+                    Join our community of conscious consumers enjoying delicious food at amazing prices while reducing food waste.
+                </p>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h3>Up to 70% Off</h3>
+                            <p>Enjoy massive discounts on quality food from top restaurants and stores</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h3>Eco-Friendly</h3>
+                            <p>Help reduce food waste and your environmental footprint with every purchase</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h3>Quick Delivery</h3>
+                            <p>Get your food delivered fast with our network of reliable delivery partners</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h3>Premium Quality</h3>
+                            <p>All food is fresh, delicious, and perfectly good - just surplus or near expiry</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <div class="stat-item">
+                        <span class="stat-number">50K+</span>
+                        <span class="stat-label">Happy Customers</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">1.2M+</span>
+                        <span class="stat-label">Meals Saved</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Partner Stores</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Side - Login Form -->
+        <div class="login-right">
+            <div class="login-right-content">
+                <div class="login-header">
+                    <div class="user-type-badge">Consumer Account</div>
+                    <h2 class="login-title">Welcome Back!</h2>
+                    <p class="login-subtitle">Sign in to your account to continue</p>
+                </div>
+                
+                <form class="login-form" id="consumer-login-form">
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <span class="symbol-icon">@</span>
+                            <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <span class="symbol-icon">•••••••</span>
+                            <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                            <button type="button" class="password-toggle" id="toggle-password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="remember-forgot">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Keep me signed in</label>
+                        </div>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+                    
+                    <button type="submit" class="login-button">
+                        <i class="fas fa-sign-in-alt"></i> Sign In to Food Loop
+                    </button>
+                    
+                    <div class="divider">
+                        <span>Or continue with</span>
+                    </div>
+                    
+                    <div class="social-login">
+                        <button type="button" class="social-button google">
+                            <i class="fab fa-google social-icon"></i> Google
+                        </button>
+                        <button type="button" class="social-button facebook">
+                            <i class="fab fa-facebook-f social-icon"></i> Facebook
+                        </button>
+                        <button type="button" class="social-button apple">
+                            <i class="fab fa-apple social-icon"></i> Apple
+                        </button>
+                    </div>
+                    
+                    <div class="register-link">
+                        New to Food Loop? <a href="#" id="register-link">Create an account</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        Welcome back to FOOD LOOP! Redirecting to your dashboard...
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password visibility toggle
+            const togglePassword = document.getElementById('toggle-password');
+            const passwordInput = document.getElementById('password');
+            const passwordSymbol = document.querySelector('.form-group:nth-child(2) .symbol-icon');
+            
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                // Toggle eye icon
+                const icon = this.querySelector('i');
+                if (type === 'password') {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                    passwordSymbol.textContent = '•••••••';
+                } else {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                    passwordSymbol.textContent = 'password';
+                }
+            });
+            
+            // Form submission
+            const loginForm = document.getElementById('consumer-login-form');
+            const notification = document.getElementById('notification');
+            
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                // Basic validation
+                if (!email || !password) {
+                    showNotification('Please fill in all fields', 'error');
+                    return;
+                }
+                
+                // Simulate login process
+                const loginButton = this.querySelector('.login-button');
+                const originalText = loginButton.innerHTML;
+                
+                loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
+                loginButton.disabled = true;
+                
+                // Add loading animation to form
+                this.style.opacity = '0.7';
+                
+                // Simulate API call
+                setTimeout(() => {
+                    // In a real application, this would be an API call to authenticate
+                    console.log('Consumer login attempt with:', { email, password });
+                    
+                    // Show success notification
+                    showNotification('Login successful! Welcome back to FOOD LOOP!', 'success');
+                    
+                    // Reset button and form
+                    setTimeout(() => {
+                        loginButton.innerHTML = originalText;
+                        loginButton.disabled = false;
+                        this.style.opacity = '1';
+                        
+                        // In a real application, you would redirect to the consumer dashboard
+                        // window.location.href = 'consumer-dashboard.html';
+                    }, 2000);
+                    
+                }, 2000);
+            });
+            
+            // Show notification function
+            function showNotification(message, type) {
+                notification.textContent = message;
+                notification.className = 'notification show';
+                
+                if (type === 'error') {
+                    notification.style.background = 'var(--highlight)';
+                } else {
+                    notification.style.background = 'var(--strong-accent)';
+                }
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Social login buttons
+            const socialButtons = document.querySelectorAll('.social-button');
+            
+            socialButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const platform = this.textContent.trim();
+                    showNotification(`Connecting with ${platform}...`, 'success');
+                    
+                    // Simulate social login delay
+                    setTimeout(() => {
+                        showNotification(`Successfully connected with ${platform}!`, 'success');
+                    }, 1500);
+                });
+            });
+            
+            // Forgot password link
+            const forgotPassword = document.querySelector('.forgot-password');
+            
+            forgotPassword.addEventListener('click', function(e) {
+                e.preventDefault();
+                showNotification('Password reset email sent! Check your inbox.', 'success');
+            });
+            
+            // Register link
+            const registerLink = document.getElementById('register-link');
+            
+            registerLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showNotification('Redirecting to registration page...', 'success');
+            });
+            
+            // Benefit cards animation on scroll
+            const benefitCards = document.querySelectorAll('.benefit-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = `${entry.target.dataset.delay || '0s'}`;
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            benefitCards.forEach((card, index) => {
+                card.dataset.delay = `${index * 0.1}s`;
+                observer.observe(card);
+            });
+
+            // Email input animation
+            const emailInput = document.getElementById('email');
+            const emailSymbol = document.querySelector('.form-group:nth-child(1) .symbol-icon');
+            
+            emailInput.addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    emailSymbol.style.opacity = '0.9';
+                    emailSymbol.style.transform = 'translateY(-50%) scale(1.1)';
+                } else {
+                    emailSymbol.style.opacity = '0.7';
+                    emailSymbol.style.transform = 'translateY(-50%) scale(1)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
